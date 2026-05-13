@@ -17,7 +17,8 @@ import FileExplorer from '../components/FileExplorer';
 import FileInsight from '../components/FileInsight';
 import ChatWidget from '../components/ChatWidget';
 import HistoryView from '../components/HistoryView';
-import { Settings, MessageSquare, Sparkles, History } from 'lucide-react';
+import { exportReport, exportToMarkdown } from '../utils/ExportService';
+import { Settings, MessageSquare, Sparkles, History, MoreVertical } from 'lucide-react';
 
 const Dashboard = () => {
   const { owner, repo } = useParams();
@@ -82,9 +83,25 @@ const Dashboard = () => {
             >
               <Settings size={20} />
             </button>
-            <button className="flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-sm font-bold transition-colors">
-              <Download className="h-4 w-4" /> Export Report
-            </button>
+            <div className="relative group">
+              <button className="flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-sm font-bold transition-colors">
+                <Download className="h-4 w-4" /> Export
+              </button>
+              <div className="absolute right-0 mt-2 w-48 bg-surface border border-gray-800 rounded-lg shadow-2xl py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-[60]">
+                <button 
+                  onClick={() => exportReport(data)}
+                  className="w-full text-left px-4 py-2 text-sm hover:bg-gray-800 transition-colors"
+                >
+                  Download JSON
+                </button>
+                <button 
+                  onClick={() => exportToMarkdown(data)}
+                  className="w-full text-left px-4 py-2 text-sm hover:bg-gray-800 transition-colors"
+                >
+                  Download Markdown
+                </button>
+              </div>
+            </div>
           </div>
           <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
         </div>
