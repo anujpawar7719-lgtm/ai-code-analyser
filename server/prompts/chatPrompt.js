@@ -14,6 +14,8 @@ You are helping a developer understand this repository: "${context.repoName}".
 - **Tech Stack:** ${context.techStack.languages.join(', ')} | ${context.techStack.frameworks.join(', ')}
 - **Architecture Overview:** ${context.architecture}
 - **Key Hotspots:** ${context.hotspots.map(h => h.file).join(', ')}
+- **Recent Activity:** ${context.recentHistory?.join('; ') || 'N/A'}
+- **High Churn Files:** ${context.highChurn?.join(', ') || 'N/A'}
 
 ### REPOSITORY STRUCTURE:
 ${context.structure.join('\n')}

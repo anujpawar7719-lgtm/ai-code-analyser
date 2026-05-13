@@ -100,7 +100,9 @@ export const chatWithRepo = async (repoData, message, history = [], aiConfig = {
     techStack: extractTechStack(parsedFiles),
     architecture: analysis.architecture?.dataFlow || 'N/A',
     hotspots: metrics.repoSummary.hotspots,
-    structure: fileTree.slice(0, 100).map(f => f.path) // Limit structure for prompt size
+    structure: fileTree.slice(0, 100).map(f => f.path),
+    recentHistory: repoData.history?.slice(0, 10).map(c => `\${c.author}: \${c.message}`),
+    highChurn: repoData.churn?.slice(0, 5).map(c => c.file)
   };
 
   const promptText = chatPrompt.generate(context, message, history);
