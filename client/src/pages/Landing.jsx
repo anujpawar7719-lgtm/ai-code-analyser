@@ -19,14 +19,14 @@ const Landing = () => {
     
     mutate(data, {
       onSuccess: () => {
-        navigate(`/dashboard/\${owner}/\${repo}`, { state: { initialData: null } });
+        navigate(`/dashboard/${owner}/${repo}`, { state: { initialData: null } });
       }
     });
   };
 
   const examples = [
+    { name: 'karpathy/micrograd', url: 'https://github.com/karpathy/micrograd' },
     { name: 'facebook/react', url: 'https://github.com/facebook/react' },
-    { name: 'vercel/next.js', url: 'https://github.com/vercel/next.js' },
     { name: 'fastapi/fastapi', url: 'https://github.com/fastapi/fastapi' }
   ];
 

@@ -21,7 +21,7 @@ const AnalysisForm = ({ onSubmit, isLoading }) => {
           type="text"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
-          placeholder="https://github.com/owner/repo"
+          placeholder="https://github.com/owner/repo or multiple URLs separated by commas"
           className="block w-full pl-12 pr-4 py-4 bg-surface border border-gray-800 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-lg font-mono"
           required
         />

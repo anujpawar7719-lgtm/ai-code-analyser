@@ -33,7 +33,7 @@ const Dashboard = () => {
     queryFn: async () => {
       const aiConfig = JSON.parse(localStorage.getItem('repolens_ai_config') || '{}');
       const { data } = await axios.post('/api/analyze', { 
-        url: `https://github.com/\${owner}/\${repo}`,
+        url: `https://github.com/${owner}/${repo}`,
         aiConfig
       });
       return data;
@@ -114,7 +114,7 @@ const Dashboard = () => {
           <div className="grid grid-cols-3 gap-4">
             <StatCard label="Total Files" value={data.metrics.totalFiles} />
             <StatCard label="Total LOC" value={data.metrics.totalLOC.toLocaleString()} />
-            <StatCard label="Health Score" value={`\${data.hotspots.healthScore}%`} isHighlight />
+            <StatCard label="Health Score" value={`${data.hotspots.healthScore}%`} isHighlight />
           </div>
 
           {/* Tabs */}
@@ -123,7 +123,7 @@ const Dashboard = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-all \${
+                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${
                   activeTab === tab.id ? 'bg-primary text-background' : 'text-gray-400 hover:text-white'
                 }`}
               >
@@ -210,7 +210,7 @@ const Dashboard = () => {
       <ChatWidget 
         isOpen={isChatOpen} 
         onClose={() => setIsChatOpen(false)} 
-        repoUrl={`https://github.com/\${owner}/\${repo}`}
+        repoUrl={`https://github.com/${owner}/${repo}`}
         initialMessage={chatMessage}
       />
     </div>
@@ -218,9 +218,9 @@ const Dashboard = () => {
 };
 
 const StatCard = ({ label, value, isHighlight }) => (
-  <div className={`card text-center \${isHighlight ? 'border-primary/50 bg-primary/5' : ''}`}>
+  <div className={`card text-center ${isHighlight ? 'border-primary/50 bg-primary/5' : ''}`}>
     <p className="text-[10px] font-mono text-gray-500 uppercase tracking-widest mb-1">{label}</p>
-    <p className={`text-2xl font-bold \${isHighlight ? 'text-primary' : ''}`}>{value}</p>
+    <p className={`text-2xl font-bold ${isHighlight ? 'text-primary' : ''}`}>{value}</p>
   </div>
 );
 

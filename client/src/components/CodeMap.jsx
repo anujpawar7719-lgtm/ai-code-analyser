@@ -65,7 +65,7 @@ const CodeMap = ({ data }) => {
 
     // Tooltip simulation
     node.append('title')
-      .text(d => `\${d.label}\nLOC: \${d.loc}\nComplexity: \${d.complexity}`);
+      .text(d => `${d.label}\nLOC: ${d.loc}\nComplexity: ${d.complexity}`);
 
     simulation.on('tick', () => {
       link
