@@ -20,6 +20,21 @@
   .glass {
     @apply bg-opacity-20 bg-gray-900 backdrop-blur-md border border-gray-800;
   }
+
+  .gradient-border {
+    @apply border-transparent bg-gradient-to-r from-primary to-secondary bg-clip-border;
+  }
+  
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent;
+  }
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 5px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  @apply bg-gray-800 rounded-full hover:bg-primary/50 transition-colors;
 }
 
 /* Custom scrollbar */

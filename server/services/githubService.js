@@ -99,6 +99,30 @@ export const fetchFilesContent = async (owner, repo, files, branch) => {
   return results;
 };
 
+/**
+ * Fetches content of a single file
+ */
+export const fetchSingleFileContent = async (owner, repo, path, branch) => {
+  try {
+    const { data } = await octokit.repos.getContent({
+      owner,
+      repo,
+      path,
+      ref: branch
+    });
+
+    const content = Buffer.from(data.content, 'base64').toString('utf-8');
+    return {
+      path,
+      content,
+      size: data.size,
+      language: detectLanguage(path)
+    };
+  } catch (error) {
+    throw new Error(`Failed to fetch file ${path}: ${error.message}`);
+  }
+};
+
 const detectLanguage = (path) => {
   const ext = path.split('.').pop().toLowerCase();
   const langMap = {

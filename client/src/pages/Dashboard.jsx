@@ -13,12 +13,18 @@ import CodeMap from '../components/CodeMap';
 import SummaryCards from '../components/SummaryCards';
 import HotspotList from '../components/HotspotList';
 import SettingsModal from '../components/SettingsModal';
-import { Settings } from 'lucide-react';
+import FileExplorer from '../components/FileExplorer';
+import FileInsight from '../components/FileInsight';
+import ChatWidget from '../components/ChatWidget';
+import { Settings, MessageSquare, Sparkles } from 'lucide-react';
 
 const Dashboard = () => {
   const { owner, repo } = useParams();
   const [activeTab, setActiveTab] = useState('summary');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatMessage, setChatMessage] = useState('');
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['analysis', owner, repo],
@@ -125,15 +131,24 @@ const Dashboard = () => {
                   <HotspotList hotspots={data.hotspots} metrics={data.metrics} />
                 )}
                 {activeTab === 'architecture' && (
-                   <div className="card space-y-4">
-                      <h3 className="font-bold text-lg">Directory Structure</h3>
-                      <div className="space-y-2">
-                        {data.architecture.directories.map((dir, i) => (
-                          <div key={i} className="flex items-center gap-4 p-2 hover:bg-gray-800 rounded-lg border border-transparent hover:border-gray-700 transition-all">
-                            <code className="text-primary text-sm min-w-[120px]">{dir.path}</code>
-                            <span className="text-sm text-gray-400">{dir.description}</span>
-                          </div>
-                        ))}
+                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-[700px]">
+                      <div className="lg:col-span-4 h-full">
+                        <FileExplorer 
+                          tree={data.fileTree} 
+                          onFileSelect={setSelectedFile} 
+                          selectedFile={selectedFile} 
+                        />
+                      </div>
+                      <div className="lg:col-span-8 h-full overflow-y-auto pr-2 scrollbar-thin">
+                        <FileInsight 
+                          file={selectedFile} 
+                          metrics={data.metrics} 
+                          parsedData={data.parsedFiles}
+                          onAskAI={(msg) => {
+                            setChatMessage(msg);
+                            setIsChatOpen(true);
+                          }}
+                        />
                       </div>
                    </div>
                 )}
@@ -161,6 +176,21 @@ const Dashboard = () => {
            </div>
         </div>
       </main>
+
+      {/* Floating Chat Trigger */}
+      <button 
+        onClick={() => setIsChatOpen(true)}
+        className="fixed bottom-6 right-6 p-4 bg-primary text-background rounded-full shadow-xl hover:scale-110 active:scale-95 transition-all z-40 group"
+      >
+        <Sparkles size={24} className="group-hover:rotate-12 transition-transform" />
+      </button>
+
+      <ChatWidget 
+        isOpen={isChatOpen} 
+        onClose={() => setIsChatOpen(false)} 
+        repoUrl={`https://github.com/\${owner}/\${repo}`}
+        initialMessage={chatMessage}
+      />
     </div>
   );
 };

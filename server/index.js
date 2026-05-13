@@ -9,6 +9,7 @@ import { dirname, join } from 'path';
 // Route imports
 import analyzeRoutes from './routes/analyze.js';
 import statusRoutes from './routes/status.js';
+import chatRoutes from './routes/chat.js';
 
 dotenv.config();
 
@@ -36,6 +37,7 @@ morgan.token('timestamp', () => new Date().toISOString());
 // Routes
 app.use('/api/analyze', analyzeRoutes);
 app.use('/api/status', statusRoutes);
+app.use('/api/chat', chatRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
