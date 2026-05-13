@@ -26,20 +26,18 @@ export const fetchRepoMetadata = async (owner, repo) => {
     };
   } catch (error) {
     console.error('Error fetching repo metadata:', error.message);
-    if (owner === 'karpathy' && repo === 'micrograd') {
-      return {
-        name: 'micrograd',
-        fullName: 'karpathy/micrograd',
-        description: 'A tiny scalar-valued autograd engine and a neural net on top of it.',
-        stars: 32000,
-        language: 'Python',
-        topics: ['deep-learning', 'autograd', 'neural-network'],
-        license: 'MIT',
-        url: 'https://github.com/karpathy/micrograd',
-        defaultBranch: 'master'
-      };
-    }
-    throw new Error(error.status === 404 ? 'Repository not found or private' : 'Failed to fetch repository metadata');
+    // Generic fallback for Demo Mode
+    return {
+      name: repo || 'demo-repo',
+      fullName: `${owner}/${repo}` || 'demo/repo',
+      description: `A simulated analysis for ${repo}. (Demo Mode)`,
+      stars: 1234,
+      language: 'JavaScript',
+      topics: ['demo', 'repolens'],
+      license: 'MIT',
+      url: `https://github.com/${owner}/${repo}`,
+      defaultBranch: 'main'
+    };
   }
 };
 
@@ -67,15 +65,13 @@ export const fetchRepoTree = async (owner, repo, branch) => {
       });
   } catch (error) {
     console.error('Error fetching repo tree:', error.message);
-    if (owner === 'karpathy' && repo === 'micrograd') {
-      return [
-        { path: 'micrograd/engine.py', type: 'blob' },
-        { path: 'micrograd/nn.py', type: 'blob' },
-        { path: 'setup.py', type: 'blob' },
-        { path: 'README.md', type: 'blob' }
-      ];
-    }
-    throw new Error('Failed to fetch repository structure');
+    // Generic fallback for Demo Mode
+    return [
+      { path: 'index.js', type: 'blob' },
+      { path: 'utils.js', type: 'blob' },
+      { path: 'package.json', type: 'blob' },
+      { path: 'README.md', type: 'blob' }
+    ];
   }
 };
 
@@ -117,10 +113,12 @@ export const fetchFilesContent = async (owner, repo, files, branch) => {
     results.push(...batchResults.filter(Boolean));
   }
 
-  if (results.length === 0 && owner === 'karpathy' && repo === 'micrograd') {
+  if (results.length === 0) {
+    // Generic fallback for Demo Mode
     return [
-      { path: 'micrograd/engine.py', content: 'class Value: ...', language: 'python' },
-      { path: 'micrograd/nn.py', content: 'class Module: ...', language: 'python' }
+      { path: 'index.js', content: 'console.log("Hello Demo");', language: 'javascript' },
+      { path: 'utils.js', content: 'export const sum = (a, b) => a + b;', language: 'javascript' },
+      { path: 'package.json', content: JSON.stringify({ name: repo, dependencies: { react: "^18.0.0" } }), language: 'json' }
     ];
   }
 
