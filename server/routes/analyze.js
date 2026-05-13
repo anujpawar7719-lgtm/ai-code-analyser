@@ -56,17 +56,29 @@ router.post('/', async (req, res, next) => {
     // 8. Transform to Graph
     const graph = transformToGraph(parsedFiles, metrics);
 
+    // 8.5. Fetch History & Churn
+    const history = await githubService.fetchCommitHistory(owner, repo);
+    const churn = await githubService.calculateChurn(owner, repo);
+
     // 9. Assemble Final Response
     const response = {
       repoId: `\${owner}/\${repo}@\${actualBranch}`,
+      repoUrl: url,
       analyzedAt: new Date().toISOString(),
       metadata,
       summary: aiResults.summary,
       architecture: aiResults.architecture,
       entryPoints: aiResults.entryPoints,
       hotspots: aiResults.hotspots,
-      metrics: metrics.repoSummary,
+      metrics: {
+        ...metrics.repoSummary,
+        perFile: metrics.perFile
+      },
       graph,
+      fileTree: tree,
+      parsedFiles,
+      history,
+      churn,
       techStack: aiResults.summary.techStack || { languages: [], frameworks: [] }
     };
 

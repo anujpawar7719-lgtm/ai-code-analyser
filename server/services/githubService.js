@@ -123,6 +123,69 @@ export const fetchSingleFileContent = async (owner, repo, path, branch) => {
   }
 };
 
+/**
+ * Fetches recent commit history
+ */
+export const fetchCommitHistory = async (owner, repo, limit = 50) => {
+  try {
+    const { data } = await octokit.repos.listCommits({
+      owner,
+      repo,
+      per_page: limit
+    });
+
+    return data.map(c => ({
+      sha: c.sha,
+      message: c.commit.message,
+      author: c.commit.author.name,
+      date: c.commit.author.date,
+      url: c.html_url
+    }));
+  } catch (error) {
+    console.error('Error fetching commits:', error.message);
+    return [];
+  }
+};
+
+/**
+ * Analyzes file churn (which files change most often)
+ */
+export const calculateChurn = async (owner, repo, limit = 100) => {
+  try {
+    const { data } = await octokit.repos.listCommits({
+      owner,
+      repo,
+      per_page: limit
+    });
+
+    const churnMap = {};
+    
+    // For each commit, we need to know which files changed
+    // Note: This requires a separate call per commit, so we'll limit it
+    const recentCommits = data.slice(0, 15); // Only check 15 commits to avoid rate limits
+    
+    for (const commit of recentCommits) {
+      const { data: details } = await octokit.repos.getCommit({
+        owner,
+        repo,
+        ref: commit.sha
+      });
+
+      details.files.forEach(file => {
+        churnMap[file.filename] = (churnMap[file.filename] || 0) + 1;
+      });
+    }
+
+    return Object.entries(churnMap)
+      .map(([file, count]) => ({ file, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 10);
+  } catch (error) {
+    console.error('Error calculating churn:', error.message);
+    return [];
+  }
+};
+
 const detectLanguage = (path) => {
   const ext = path.split('.').pop().toLowerCase();
   const langMap = {

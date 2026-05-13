@@ -16,7 +16,8 @@ import SettingsModal from '../components/SettingsModal';
 import FileExplorer from '../components/FileExplorer';
 import FileInsight from '../components/FileInsight';
 import ChatWidget from '../components/ChatWidget';
-import { Settings, MessageSquare, Sparkles } from 'lucide-react';
+import HistoryView from '../components/HistoryView';
+import { Settings, MessageSquare, Sparkles, History } from 'lucide-react';
 
 const Dashboard = () => {
   const { owner, repo } = useParams();
@@ -46,6 +47,7 @@ const Dashboard = () => {
     { id: 'summary', label: 'Summary', icon: BarChart3 },
     { id: 'hotspots', label: 'Hotspots', icon: AlertCircle },
     { id: 'architecture', label: 'Architecture', icon: Layout },
+    { id: 'history', label: 'History', icon: History },
   ];
 
   return (
@@ -151,6 +153,9 @@ const Dashboard = () => {
                         />
                       </div>
                    </div>
+                )}
+                {activeTab === 'history' && (
+                  <HistoryView history={data.history} churn={data.churn} />
                 )}
               </motion.div>
             </AnimatePresence>
