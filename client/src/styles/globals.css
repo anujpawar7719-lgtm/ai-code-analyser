@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background text-gray-100 font-sans antialiased;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-primary text-background font-bold rounded-md hover:bg-opacity-90 transition-all active:scale-95;
+  }
+  
+  .card {
+    @apply bg-surface border border-gray-800 rounded-lg p-4 shadow-xl backdrop-blur-sm;
+  }
+
+  .glass {
+    @apply bg-opacity-20 bg-gray-900 backdrop-blur-md border border-gray-800;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-background;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-800 rounded-full hover:bg-gray-700;
+}
+
+/* D3 Node Pulsing Animation */
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.node-pulse {
+  animation: pulse 2s infinite ease-in-out;
+}
